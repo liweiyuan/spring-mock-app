@@ -57,7 +57,7 @@ jobs:
           nohup ./gradlew bootRun > app.log 2>&1 &
           echo "App starting... wait for it to be ready"
           for i in {1..30}; do
-            if curl -s http://localhost:8080/api/health; then
+            if curl -s http://localhost:8080/api/products; then
               echo "Application is up!"
               break
             fi
