@@ -51,8 +51,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // JMH 依赖
-    jmh("org.openjdk.jmh:jmh-core:1.32")
-    jmh("org.openjdk.jmh:jmh-generator-annprocess:1.32")
+    implementation("org.openjdk.jmh:jmh-core:1.32")
+    implementation("org.openjdk.jmh:jmh-generator-annprocess:1.32")
 
     // Mock数据相关依赖
     implementation("com.github.javafaker:javafaker:1.0.2")
