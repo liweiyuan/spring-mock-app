@@ -30,6 +30,9 @@ jobs:
       - name: Run tests
         run: ./gradlew test
 
+      - name: Run performance test
+        run: ./gradlew jmh
+
   performance-test:
     needs: build
     runs-on: ubuntu-latest
