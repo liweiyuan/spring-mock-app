@@ -38,7 +38,7 @@ class MockProductService: ProductService {
     }
 
     override fun getProducts(): List<Product> {
-        return this.products.toList()
+        return this.products.toList() // Return an immutable copy
     }
 
     override fun getProductById(id: Long): Product? {
@@ -46,41 +46,38 @@ class MockProductService: ProductService {
     }
 
     override fun createProduct(product: Product): Product {
-        // 生成新的ID - 当前最大ID加1，如果列表为空则使用1
-        val newId = if (products.isEmpty()) 1L else products.maxByOrNull { it.id }?.id?.plus(1) ?: 1L
-
-        // 创建带有新ID的产品副本
-        val newProduct = Product()
-        newProduct.id = newId
-        newProduct.name = product.name
-        newProduct.price = product.price
-
-        // 添加到列表
+        val newId = (products.maxOfOrNull { it.id } ?: 0L) + 1L
+        // Assuming Product has a no-arg constructor and mutable properties
+        // If Product were a data class, this would be: product.copy(id = newId)
+        val newProduct = Product().apply {
+            this.id = newId
+            this.name = product.name
+            this.price = product.price
+        }
         products.add(newProduct)
-
         return newProduct
     }
 
     override fun updateProduct(product: Product): Product? {
-        // 查找现有产品
-        val existingProductIndex = getProductById(product.id)?.let {
-            products.indexOf(it)
-        } ?: return null
-        // 创建更新后的产品对象，保留原始ID
-        val updatedProduct = Product()
-        updatedProduct.id = product.id
-        updatedProduct.name = product.name
-        updatedProduct.price = product.price
-
-        // 替换列表中的现有产品
-        products[existingProductIndex] = updatedProduct
-
-        return updatedProduct
+        val index = products.indexOfFirst { it.id == product.id }
+        return if (index != -1) {
+            // Assuming Product has a no-arg constructor and mutable properties
+            // If Product were a data class, this could be: products[index] = product.copy()
+            // Or if properties are mutable: products[index].apply { name = product.name; price = product.price }
+            // For now, creating a new instance and replacing, similar to original logic
+            val updatedProduct = Product().apply {
+                this.id = product.id // Keep original ID
+                this.name = product.name
+                this.price = product.price
+            }
+            products[index] = updatedProduct
+            updatedProduct
+        } else {
+            null
+        }
     }
 
     override fun deleteProduct(id: Long) {
-        // 查找并删除产品
-        val productToRemove = getProductById(id) // 这将在产品不存在时抛出异常
-        products.remove(productToRemove)
+        products.removeIf { it.id == id }
     }
 }
