@@ -81,7 +81,7 @@ jobs:
           echo '```' >> performance_report.md
 
       - name: Upload performance report
-        uses: actions/upload-artifact@8a0c2d23819de87b9ed5e274e3b3fc68a3780714
+        uses: actions/upload-artifact@v3.1.3
         with:
           name: performance-report
           path: performance_report.md
